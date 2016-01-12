@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+{% load i18n %}
+
+{% block content %}
+	<div class="row">
+		<h3>Edit {{ object.username }}</h3>
+		<form class="form" method="POST" action="" >
+			{% csrf_token %}
+			{% bootstrap_form form %}
+			<button class="btn btn-primary" type="submit" name="action">
+			{% trans "Update" %}
+			</button>
+		</form>
+	</div>
+
+{% endblock content %}

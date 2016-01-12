@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+	<div class="row">
+		{% for event in events %}
+		<div class="event">
+			<h3><a href="{{ event.get_absolute_url }}" class="text-primary">{{ event.title }}</a></h3>
+			<h5 class="text-muted">{{ event.location }}</h5>
+			<p>{{ event.description|truncatewords_html:100|safe }}</p>
+			{% with organizers=event.organizers.all %}
+			{% if organizers %}
+				<p>
+					{% if organizers.count > 1 %}
+						Organizers:
+					{% else %}
+						Organizer:
+					{% endif %}
+					{% for organizer in organizers %}
+						<a href="{% url 'account_profile' organizer.pk organizer.username %}">{{ organizer.username }}</a>
+						{% if not forloop.last %}
+							,&nbsp;
+						{% endif %}
+					{% endfor %}
+				</p>
+			{% endif %}
+		{% endwith %}
+		</div>
+		{% if not forloop.last %}
+			<hr/>
+		{% endif %}
+	{% endfor %}
+</div>
+{% endblock content %}

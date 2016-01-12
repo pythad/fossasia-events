@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+	<div class="col-xs-12 user_block">
+		<div class="well well-sm">
+			<div class="row">
+				<div class="col-xs-10 user">
+					{% if user.first_name or user.last_name %}
+						<h3>{{ user.first_name }} {{ user.last_name }}</h3>
+					{% endif %}
+					{% if user.username %}
+						<h3>{{ user.username }}</h3>
+					{% endif %}
+					<br />
+					{% if user.location %}
+					<small><cite title="San Francisco, USA">{{ user.location }} <i class="glyphicon glyphicon-map-marker">
+					</i></cite></small>						
+					{% endif %}
+					{% if user.email %}
+						<i class="glyphicon glyphicon-envelope"></i>{{ user.email }}
+						<br />
+					{% endif %}
+					{% if user.website %}
+						<i class="glyphicon glyphicon-globe"></i><a href="{{ user.website }}">{{ user.website }}</a>
+						<br />
+					{% endif %}
+					{% if user.bdate %}
+						<i class="glyphicon glyphicon-gift"></i>{{ user.bdate }}						
+					{% endif %}
+					{% if user.is_staff %}
+						<i class="glyphicon glyphicon-wrench"></i> Staff member
+					{% endif %}
+				</div>
+				<div class="col-xs-2">
+					{% if request.user.pk == user.pk %}
+					<a href="{% url 'account_profile_edit' user.pk user.username %}"><i class="glyphicon glyphicon-pencil text-muted pull-right"></i></a>						
+					{% endif %}
+				</div>
+		</div>
+	</div>
+		{% with events=organized_events %}
+			{% if events %}
+			<div>
+				<h4>Organized events:</h4>
+				{% include "events/__items/events_table.html" %}
+			</div>
+			{% endif %}
+		{% endwith %}
+		{% with events=in_events %}
+			{% if events %}
+			<div>
+				<h4>In events:</h4>
+				{% include "events/__items/events_table.html" %}
+			</div>
+			{% endif %}
+		{% endwith %}
+	</div>
+</div>
+{% endblock content %}

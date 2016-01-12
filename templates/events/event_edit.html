@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+{% load i18n %}
+{% load staticfiles %}
+{% block additional_css %}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-datetimepicker.min.css' %}">
+{% endblock additional_css %}
+{% block content %}
+	<div class="row">
+		<form class="form" method="POST" action="" >
+			{% csrf_token %}
+			<div class="fieldWrapper">
+				{{ form.title.label_tag }}
+				{% bootstrap_field form.title show_label=False %}
+				{{ form.title.errors }}
+			</div>
+			<div class="fieldWrapper">
+				{{ form.description.label_tag }}
+				{% bootstrap_field form.description show_label=False %}
+			</div>
+			<div class="fieldWrapper">
+				<label for="id_date">{{ form.date.label }}:</label>
+				<div class="form-group">
+					<label for="id_date" class="sr-only control-label">{{ form.date.label }}</label>
+					<div class='input-group date' id='datetimepicker1'>
+						<input type="text" title="" placeholder="Date" name="date" class="form-control">
+						<span class="input-group-addon">
+							<span class="glyphicon glyphicon-calendar"></span>
+						</span>
+					</div>
+				</div>
+				{{ form.date.errors }}
+			</div>
+			<div class="fieldWrapper">
+				{{ form.organizers.label_tag }}
+				{% bootstrap_field form.organizers show_label=False %}
+				{{ form.organizers.errors }}
+			</div>
+			{% buttons %}
+			<button class="btn btn-primary" type="submit" name="action">
+			{% trans "Add" %}
+			</button>
+		{% endbuttons %}
+	</form>
+</div>
+{% endblock content %}
+{% block additional_js %}
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.0/moment.min.js"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+<script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+<script type="text/javascript">
+$(function () {
+	$('#datetimepicker1').datetimepicker({
+                 format: 'MM/DD/YYYY'
+           });
+});
+</script>
+{% endblock additional_js %}

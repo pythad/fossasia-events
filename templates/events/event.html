@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="row">
+		<div data-event-pk='{{ event.pk }}' class="event">
+			<h3><a href="{{ event.get_absolute_url }}" class="text-primary">{{ event.title }}</a></h3>
+			<h5 class="text-muted">{{ event.location }}</h5>
+			<p>{{ event.description|safe }}</p>
+			{% with organizers=event.organizers.all %}
+			{% if organizers %}
+				<p>
+					{% if organizers.count > 1 %}
+						Organizers:
+					{% else %}
+						Organizer:
+					{% endif %}
+					{% for organizer in organizers %}
+						<a href="{% url 'account_profile' organizer.pk organizer.username %}">{{ organizer.username }}</a>
+						{% if not forloop.last %}
+							,&nbsp;
+						{% endif %}
+					{% endfor %}
+				</p>
+				<p>
+					{% if request.user.is_staff %}
+					<a href="{% url 'events:event_edit' event.pk %}"><i class="glyphicon glyphicon-pencil text-muted pull-left">&nbsp;Edit</i></a>						
+					{% endif %}
+				</p>
+				<br />
+			{% endif %}
+			{% endwith %}
+			{% if request.user.is_authenticated %}
+				<div class="col-md-4 participation-statuses">
+					<div class="btn-group btn-group-justified">
+					{% for n, status in participation_statuses %}
+						<a data-status='{{ n }}' class="btn btn-default p-status {% if user_status == n %}btn-primary{% endif %}">{{ status }}</a>
+					{% endfor %}
+					</div>
+				</div>
+			{% endif %}
+		</div>
+		<div id="disqus_thread"></div>
+		<script>
+		    /**
+		     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+		     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+		     */
+		    /*
+		    var disqus_config = function () {
+		        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+		        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+		    };
+		    */
+		    (function() {  // DON'T EDIT BELOW THIS LINE
+		        var d = document, s = d.createElement('script');
+		        
+		        s.src = '//eventsfossasia.disqus.com/embed.js';
+		        
+		        s.setAttribute('data-timestamp', +new Date());
+		        (d.head || d.body).appendChild(s);
+		    })();
+		</script>
+		<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+	</div>
+{% endblock content %}

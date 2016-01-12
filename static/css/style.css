@@ -1,0 +1,45 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+body {
+    margin: 0 0 100px; /* bottom = footer height */
+}
+footer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 100px;
+    width: 100%;
+}
+.navbar {
+  border-radius: 0 !important;
+}
+.participation-statuses {
+	padding: 0;
+	margin: 25px 0;
+}
+.user {
+	padding-left: 40px;
+}
+.user .glyphicon {
+	margin-bottom: 10px;
+	margin-right: 10px;
+}
+.user small {
+	display: block;
+	line-height: 1.428571429;
+	color: #999;
+}
+.p-status:hover {
+	cursor: pointer;
+}
+.status-active {
+	background-color: black;
+}
+.notice-heading {
+	font-size: 1.3em;
+}
+.django-ckeditor-widget {
+	width: 100% !important;
+}

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load notifications_tags %}
+
+{% block content %}
+{% notifications_unread as unread_count %}
+<div class="row">
+    <div class="col-xs-12 col-md-3">
+        <ul class="nav nav-pills nav-stacked">
+          <li class="{% if request.resolver_match.namespaces.0 == 'notifications' and request.resolver_match.url_name == 'unread' %}active{% endif %}"><a href="{% url 'notifications:unread' %}">Unread
+          {% if unread_count %}
+            <span class="badge pull-right">{{ unread_count }}</span>
+          {% endif %}
+          </a></li>
+          <li class="{% if request.resolver_match.namespaces.0 == 'notifications' and request.resolver_match.url_name == 'all' %}active{% endif %}"><a href="{% url 'notifications:all' %}">All</a></li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+              Actions <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="{% url 'notifications:mark_all_as_read' %}">Mark all as read</a></li>
+<!--               <li><a href="#">Delete all</a></li> -->
+            </ul>
+          </li>
+        </ul>       
+    </div>
+    <div class="col-xs-12 col-md-9 notifications">
+    {% if notifications %}
+      {% for notice in notifications %}
+            <div class="list-group">
+                <div class="list-group-item">
+                    <span class="list-group-item-heading notice-heading">{{ notice.verb }} ({{ notice.target }})</span>
+                    <span class="pull-right notice-actions">
+                        <a href="{% url 'notifications:delete' notice.slug %}"><i class="glyphicon glyphicon-trash"></i></a>
+                        &nbsp;
+                        <a href="{% url 'notifications:mark_as_read' notice.slug %}"><i class="glyphicon glyphicon-ok"></i></a>                      
+                    </span>
+                    <p class="list-group-item-text text-muted">{{ notice.timesince }}</p>
+                    {% if notice.description %}
+                      {{ notice.description|safe }}
+                      <!-- <p class="list-group-item-text">{{ notice.description|safe }}</p> -->
+                    {% endif %}
+                </div>
+            </div>
+      {% endfor %}
+    {% else %}
+        <h3>No notifications</h3>     
+    {% endif %}
+
+    </div>
+</div> 
+{% endblock content %}
+

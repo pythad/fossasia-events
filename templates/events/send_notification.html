@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load i18n %}
+{% load bootstrap3 %}
+
+{% block content %}
+</style>
+	<div class="row">
+		<form method="POST" action="">
+			{% csrf_token %}
+			{{ form.media }}
+			{% bootstrap_form form %}
+			{% buttons %}
+				<button class="btn btn-primary" type="submit" name="action">
+				{% trans "Send" %}
+				</button>
+			{% endbuttons %}
+		</form>
+	</div>
+{% endblock content %}
+{% block additional_js %}
+<script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+<script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+{% endblock additional_js %}
