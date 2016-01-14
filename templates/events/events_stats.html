@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="row">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Event</th>
+          <th>Date</th>
+          <th>Accepted</th>
+          <th>Are not sure</th>
+          <th>Won't come</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for event in events %}
+          <tr data-event-pk="{{ event.pk }}" data-toggle="collapse" data-target=".attendees{{ event.pk }}" class="attendees-open clickable">
+            <td><a href="{{ event.get_absolute_url }}">{{ event.title|truncatewords:"4" }}</a></td>
+            <td>{{ event.date }}</td>
+            <td>{{ event.accepted }}</td>
+            <td>{{ event.not_sure }}</td>
+            <td>{{ event.declined }}</td>
+          </tr>
+          <tr class="table-accordion">
+            <td></td>
+            <td></td>
+            <td class="attendees_sure{{ event.pk }}">
+              <div class="collapse attendees{{ event.pk }}">
+                <ul class="list-unstyled">
+                </ul>
+              </div>
+            </td>
+            <td class="attendees_not_sure{{ event.pk }}">
+              <div class="collapse attendees{{ event.pk }}">
+                <ul class="list-unstyled">
+                </ul>
+              </div>
+            </td>
+            <td class="attendees_declined{{ event.pk }}">
+              <div class="collapse attendees{{ event.pk }}">
+                <ul class="list-unstyled">
+                </ul>
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock content %}

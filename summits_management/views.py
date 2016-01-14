@@ -18,7 +18,7 @@ class UserDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(UserDetailView, self).get_context_data(**kwargs)
         context['organized_events'] = self.object.organized_events.all()
-        context['in_events'] = self.object.in_events.filter(event_participation__status__in=[1, 2])
+        context['in_events'] = self.object.in_events.filter(event_participations__status__in=[1, 2])
         return context
 
 

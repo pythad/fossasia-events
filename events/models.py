@@ -37,9 +37,9 @@ class Event(models.Model):
 
 
 class Participation(models.Model):
-    event = models.ForeignKey(Event, verbose_name=_('event'), related_name='event_participation')
+    event = models.ForeignKey(Event, verbose_name=_('event'), related_name='event_participations')
     person = models.ForeignKey(
-        settings.AUTH_USER_MODEL, verbose_name=_('person'), related_name='person_participation')
+        settings.AUTH_USER_MODEL, verbose_name=_('person'), related_name='person_participations')
     status = models.PositiveIntegerField(
         _('participation status'), choices=PARTICIPATION_STATUSES)
     date_registered = models.DateTimeField(

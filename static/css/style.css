@@ -43,3 +43,7 @@ footer {
 .django-ckeditor-widget {
 	width: 100% !important;
 }
+.table-accordion td {
+	border-top: none !important;
+	padding: 0 !important;
+}

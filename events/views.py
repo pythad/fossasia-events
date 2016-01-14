@@ -1,14 +1,17 @@
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, FormView
 from django.views.decorators.http import require_POST
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404
+from django.db.models import IntegerField, Case, When, Count
+from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.db import transaction
 
 from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 from notifications.signals import notify
 
-from .models import PARTICIPATION_STATUSES, Event, Participation
+from .models import PARTICIPATION_STATUSES, Event, Participation, Participant
 from .forms import NotificationForm
 
 
@@ -16,6 +19,32 @@ class EventListView(ListView):
     model = Event
     template_name = "events/events.html"
     context_object_name = 'events'
+    paginate_by = 10
+
+
+class EventsStatistics(LoginRequiredMixin, StaffuserRequiredMixin, ListView):
+    model = Event
+    template_name = "events/events_stats.html"
+    context_object_name = 'events'
+    paginate_by = 25
+
+    def get_queryset(self):
+        queryset = self.model.objects.all()
+        queryset = queryset.annotate(
+            declined=Count(
+                Case(When(event_participations__status=0, then=1),
+                     output_field=IntegerField())
+            ),
+            not_sure=Count(
+                Case(When(event_participations__status=1, then=1),
+                     output_field=IntegerField())
+            ),
+            accepted=Count(
+                Case(When(event_participations__status=2, then=1),
+                     output_field=IntegerField())
+            )
+        )
+        return queryset
 
 
 class EventDetailView(DetailView):
@@ -82,4 +111,25 @@ def participate(request):
             participation = Participation(
                 event=event, person=request.user, status=status_n)
             participation.save()
-    return HttpResponse()
+        return HttpResponse()
+    return HttpResponseBadRequest()
+
+
+@login_required
+@staff_member_required
+def get_attendees(request):
+    if request.method == 'GET':
+        event_pk = request.GET.get('event_pk', None)
+        if event_pk:
+            event = get_object_or_404(Event, pk=event_pk)
+            event_participants = event.participants.all()
+            context = {}
+            context['attendees_sure'] = list(event_participants.filter(
+                person_participations__status=2).values('pk', 'username'))
+            context['attendees_not_sure'] = list(event_participants.filter(
+                person_participations__status=1).values('pk', 'username'))
+            context['attendees_declined'] = list(event_participants.filter(
+                person_participations__status=0).values('pk', 'username'))
+            return JsonResponse(context)
+        else:
+            return HttpResponseBadRequest()
