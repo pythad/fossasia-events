@@ -21,6 +21,8 @@ Screenshots:
 ![events view](http://s19.postimg.org/7yhxbcmtf/Selection_016.png)
 ###Single event View
 ![event view](http://s19.postimg.org/x38xorm9v/Selection_017.png)
+###Events statistics
+![events statistics](http://s19.postimg.org/ckad8pgub/Selection_019.png)
 ###Form for events adding
 ![events adding](http://s19.postimg.org/lpmedkbr7/Selection_015.png)
 ###Notifications center

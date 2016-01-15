@@ -1,6 +1,6 @@
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, FormView
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_GET
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.db.models import IntegerField, Case, When, Count
@@ -96,6 +96,7 @@ class SendNotification(LoginRequiredMixin, StaffuserRequiredMixin, FormView):
 
 
 @require_POST
+@login_required
 @transaction.atomic
 def participate(request):
     status_n = request.POST.get('status_n', None)
@@ -115,21 +116,20 @@ def participate(request):
     return HttpResponseBadRequest()
 
 
+@require_GET
 @login_required
 @staff_member_required
 def get_attendees(request):
-    if request.method == 'GET':
-        event_pk = request.GET.get('event_pk', None)
-        if event_pk:
-            event = get_object_or_404(Event, pk=event_pk)
-            event_participants = event.participants.all()
-            context = {}
-            context['attendees_sure'] = list(event_participants.filter(
-                person_participations__status=2).values('pk', 'username'))
-            context['attendees_not_sure'] = list(event_participants.filter(
-                person_participations__status=1).values('pk', 'username'))
-            context['attendees_declined'] = list(event_participants.filter(
-                person_participations__status=0).values('pk', 'username'))
-            return JsonResponse(context)
-        else:
-            return HttpResponseBadRequest()
+    event_pk = request.GET.get('event_pk', None)
+    if event_pk:
+        event = get_object_or_404(Event, pk=event_pk)
+        event_participants = event.participants.all()
+        context = {}
+        context['attendees_sure'] = list(event_participants.filter(
+            person_participations__status=2).values('pk', 'username'))
+        context['attendees_not_sure'] = list(event_participants.filter(
+            person_participations__status=1).values('pk', 'username'))
+        context['attendees_declined'] = list(event_participants.filter(
+            person_participations__status=0).values('pk', 'username'))
+        return JsonResponse(context)
+    return HttpResponseBadRequest()
