@@ -88,7 +88,7 @@ class SendNotification(LoginRequiredMixin, StaffuserRequiredMixin, FormView):
         to_events = form.cleaned_data['related_events']
         for event in to_events:
             users_to_notify = event.participants.filter(
-                person_participation__status__in=[1, 2])
+                person_participations__status__in=[1, 2])
             for user in users_to_notify:
                 notify.send(
                     actor, recipient=user, verb=title, target=event, description=description)
