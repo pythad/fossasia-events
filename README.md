@@ -17,13 +17,13 @@ and after this don't forget to  set `DEBUG` level to `True` in `settings.py`
 
 Screenshots:
 
-###Events View
+### Events View
 ![events view](http://s19.postimg.org/7yhxbcmtf/Selection_016.png)
-###Single event View
+### Single event View
 ![event view](http://s19.postimg.org/x38xorm9v/Selection_017.png)
-###Events statistics
+### Events statistics
 ![events statistics](http://s19.postimg.org/ckad8pgub/Selection_019.png)
-###Form for events adding
+### Form for events adding
 ![events adding](http://s19.postimg.org/lpmedkbr7/Selection_015.png)
-###Notifications center
+### Notifications center
 ![notifications center](http://s19.postimg.org/c3stx9klf/Selection_018.png)
